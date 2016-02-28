@@ -53,7 +53,7 @@ public class LoginModel {
 
             if(resultSet.next())
             {
-                loggedInAs();
+                //loggedInAs();
                 return true;
             }else{
                 return false;
@@ -69,35 +69,5 @@ public class LoginModel {
     }
 
 
-    public void loggedInAs() throws SQLException
-    {
-        LoginController loginController = new LoginController();
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        String user = "";
 
-        String query = "SELECT * FROM employee WHERE username = ?"; // search for user
-        try {
-
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, user); // replace this in query
-
-            resultSet = preparedStatement.executeQuery();
-
-            if(resultSet.next())
-            {
-                loginController.txtUsername.setText(user);
-
-            }else{
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }finally {
-            preparedStatement.close();
-            resultSet.close();
-        }
-
-    }
 }
