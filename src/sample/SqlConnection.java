@@ -27,7 +27,7 @@ public class SqlConnection
     {
         if(instance == null) {
 
-            instance = new SqlConnection("jdbc:mysql://127.0.0.1:3306/employeedb?useSSL=true", "root", "");
+            instance = new SqlConnection("jdbc:mysql://127.0.0.1:3306/employeedb?useSSL=true", "root", "1P@SSW0RD!");
         }
         return instance;
     }
