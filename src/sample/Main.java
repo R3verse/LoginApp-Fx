@@ -10,9 +10,10 @@ import java.io.IOException;
 
 public class Main extends Application {
 
+    public Scene scene;
     public void start(Stage primaryStage)throws IOException{
             Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
-            Scene scene = new Scene(root, 400, 400);
+            scene = new Scene(root, 400, 400);
             primaryStage.setTitle("JavaFX login sample");
             primaryStage.setScene(scene);
             primaryStage.show();

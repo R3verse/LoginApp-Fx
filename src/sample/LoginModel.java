@@ -53,7 +53,7 @@ public class LoginModel {
 
             if(resultSet.next())
             {
-                //loggedInAs();
+
                 return true;
             }else{
                 return false;
