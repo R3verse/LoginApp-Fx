@@ -39,6 +39,7 @@ public class LoginModel {
 
     public boolean isLoggedIn(String user, String pass) throws SQLException
     {
+
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         String query = "SELECT * FROM employee WHERE username = ? and password = ?"; // search for user
@@ -52,6 +53,7 @@ public class LoginModel {
 
             if(resultSet.next())
             {
+                loggedInAs();
                 return true;
             }else{
                 return false;
@@ -67,12 +69,12 @@ public class LoginModel {
     }
 
 
-    public String loggedInAs() throws SQLException
+    public void loggedInAs() throws SQLException
     {
         LoginController loginController = new LoginController();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        String user = loginController.txtUsername.getText();
+        String user = "";
 
         String query = "SELECT * FROM employee WHERE username = ?"; // search for user
         try {
@@ -84,18 +86,18 @@ public class LoginModel {
 
             if(resultSet.next())
             {
-              //resultSet.getString(user);
                 loginController.txtUsername.setText(user);
+
             }else{
-                return null;
+
             }
         } catch (Exception e) {
-            return null;
+            e.printStackTrace();
 
         }finally {
             preparedStatement.close();
             resultSet.close();
         }
-    return user;
+
     }
 }
