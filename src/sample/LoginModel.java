@@ -1,6 +1,8 @@
 package sample;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -9,6 +11,7 @@ import java.sql.SQLException;
 public class LoginModel {
 
     public Connection connection;
+
 
     public LoginModel()
     {
@@ -34,4 +37,65 @@ public class LoginModel {
         }
     }
 
+    public boolean isLoggedIn(String user, String pass) throws SQLException
+    {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        String query = "SELECT * FROM employee WHERE username = ? and password = ?"; // search for user
+        try {
+
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, user); // replace this in query
+            preparedStatement.setString(2, pass);
+
+            resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next())
+            {
+                return true;
+            }else{
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+
+        }finally {
+            preparedStatement.close();
+            resultSet.close();
+        }
+
+    }
+
+
+    public String loggedInAs() throws SQLException
+    {
+        LoginController loginController = new LoginController();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        String user = loginController.txtUsername.getText();
+
+        String query = "SELECT * FROM employee WHERE username = ?"; // search for user
+        try {
+
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, user); // replace this in query
+
+            resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next())
+            {
+              //resultSet.getString(user);
+                loginController.txtUsername.setText(user);
+            }else{
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+
+        }finally {
+            preparedStatement.close();
+            resultSet.close();
+        }
+    return user;
+    }
 }
