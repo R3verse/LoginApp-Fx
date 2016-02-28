@@ -16,7 +16,6 @@ public class SqlConnection
 
     private static SqlConnection instance;
 
-    // URL string har formatet "jdbc:mysql://borg.network:3306/cleanify2"
     private SqlConnection(String hostname, String username, String password)
     {
         this.hostname = hostname;
