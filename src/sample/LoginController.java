@@ -37,6 +37,8 @@ public class LoginController implements Initializable {
     @FXML
     public TextField username;
 
+    public TextField id;
+
     private AnchorPane root;
 
     @FXML
@@ -174,7 +176,7 @@ public class LoginController implements Initializable {
         label1.setFont(new Font("Sanserif", 20));
         label1.setMaxWidth(Double.MAX_VALUE);
 
-        TextField id = new TextField();
+        id = new TextField();
         id.setFont(Font.font("Sanserif", 20));
         id.setPromptText("ID");
         id.setMaxWidth(Double.MAX_VALUE);
@@ -217,6 +219,7 @@ public class LoginController implements Initializable {
 
         insertUserBtn.setOnAction(e -> {
 
+
             insertUsers(id, fName, lName, age, password);
         });
 
@@ -229,7 +232,7 @@ public class LoginController implements Initializable {
         return scene2;
     }
 
-    private void showAlert(String title, String headerText, String contentText)
+    public void showAlert(String title, String headerText, String contentText)
     {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(title);
@@ -247,9 +250,9 @@ public class LoginController implements Initializable {
         String user = username.getText();
         String pass = password.getText();
 
-        try
-        {
-            Statement st = connection.createStatement();
+
+            try {
+                Statement st = connection.createStatement();
 
                 String query = "INSERT INTO employee(id, firstname, lastname, age, username, password) " +
                         "VALUES (?,?,?,?,?,?)";
@@ -263,7 +266,7 @@ public class LoginController implements Initializable {
                 pst.setString(5, user);
                 pst.setString(6, pass);
 
-                System.out.println("Inserted user into database: "+ this.username.getText());
+                System.out.println("Inserted user into database: " + this.username.getText());
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Info");
                 alert.setHeaderText(null);
@@ -272,10 +275,9 @@ public class LoginController implements Initializable {
                 pst.execute();
                 pst.close();
 
-        } catch (SQLException ex)
-        {
-            ex.printStackTrace();
-        }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
     }
 
 }
