@@ -50,6 +50,28 @@ public class LoginController implements Initializable {
     @FXML
     public Button signOutBtn;
 
+
+
+    public LoginController()
+    {
+
+        try
+        {
+            SqlConnection dbConnector = SqlConnection.getInstance();
+            connection = dbConnector.getConnection();
+
+        }
+        catch (ClassNotFoundException eCNF)
+        {
+            eCNF.printStackTrace();
+        }
+        catch (SQLException eSQL)
+        {
+            eSQL.printStackTrace();
+        }
+    }
+
+
     public void initialize(URL location, ResourceBundle resources)
     {
 
@@ -154,37 +176,43 @@ public class LoginController implements Initializable {
 
         insertUserBtn.setOnAction(e -> {
 
-            PreparedStatement preparedStatement = null;
-            try {
-//                Statement st = connection.createStatement();
-                String query = "INSERT INTO employee(id, firstname, lastname, age, username, password) VALUES" + "(?,?,?,?,?,?)";
+            int specialId = 0;
+            int thisId = Integer.parseInt(id.getText());
+            String firstname = fName.getText();
+            String lastname = lName.getText();
+            int thisAge = Integer.parseInt(age.getText());
+            String user = username.getText();
+            String pass = password.getText();
 
+            try
+            {
+                Statement st = connection.createStatement();
 
-                String myId = id.getText();
-                String myFirstName = fName.getText();
-                String myLastName = lName.getText();
-                String myAge = age.getText();
-                String myUser = username.getText();
-                String myPass = password.getText();
+                    String query = "INSERT INTO employee(id, firstname, lastname, age, username, password) " +
+                            "VALUES (?,?,?,?,?,?)";
 
+                    PreparedStatement pst = connection.prepareStatement(query);
 
+                    pst.setInt(1, thisId);
+                    pst.setString(2, firstname);
+                    pst.setString(3, lastname);
+                    pst.setInt(4, thisAge);
+                    pst.setString(5, user);
+                    pst.setString(6, pass);
 
-                preparedStatement.setInt(1, Integer.parseInt(myId));
-                    preparedStatement.setString(2, myFirstName);
-                    preparedStatement.setString(3, myLastName);
-                    preparedStatement.setInt(4, Integer.parseInt(myAge));
-                    preparedStatement.setString(5, myUser);
-                    preparedStatement.setString(6, myPass);
+                    System.out.println("Inserted user into database: "+ this.username.getText());
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Info");
+                    alert.setHeaderText(null);
+                    alert.setContentText("User has been inserted into database.");
+                    alert.showAndWait();
+                    pst.execute();
+                    pst.close();
 
-                // execute the preparedstatement
-                preparedStatement.executeUpdate(query);
-
-                preparedStatement.close();
-                connection.close();
-                System.out.println("Done!");
-
-                } catch (SQLException e1) {
-                e1.printStackTrace();
+            } catch (SQLException ex)
+            {
+                ex.printStackTrace();
+                //System.err.println("Cannot insert values into bookingUsers: "+ e);
             }
         });
 
@@ -198,7 +226,11 @@ public class LoginController implements Initializable {
         return scene2;
     }
 
+    private void insertUser(int id, String firstname, String lastname, int age, String username, String password)
+    {
 
+
+    }
 
 
 }
