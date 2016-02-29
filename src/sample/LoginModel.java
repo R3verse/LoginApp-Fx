@@ -24,7 +24,6 @@ public class LoginModel {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 
     public boolean isDbConnected()

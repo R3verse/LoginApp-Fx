@@ -176,61 +176,55 @@ public class LoginController implements Initializable {
 
         insertUserBtn.setOnAction(e -> {
 
-            int specialId = 0;
-            int thisId = Integer.parseInt(id.getText());
-            String firstname = fName.getText();
-            String lastname = lName.getText();
-            int thisAge = Integer.parseInt(age.getText());
-            String user = username.getText();
-            String pass = password.getText();
-
-            try
-            {
-                Statement st = connection.createStatement();
-
-                    String query = "INSERT INTO employee(id, firstname, lastname, age, username, password) " +
-                            "VALUES (?,?,?,?,?,?)";
-
-                    PreparedStatement pst = connection.prepareStatement(query);
-
-                    pst.setInt(1, thisId);
-                    pst.setString(2, firstname);
-                    pst.setString(3, lastname);
-                    pst.setInt(4, thisAge);
-                    pst.setString(5, user);
-                    pst.setString(6, pass);
-
-                    System.out.println("Inserted user into database: "+ this.username.getText());
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Info");
-                    alert.setHeaderText(null);
-                    alert.setContentText("User has been inserted into database.");
-                    alert.showAndWait();
-                    pst.execute();
-                    pst.close();
-
-            } catch (SQLException ex)
-            {
-                ex.printStackTrace();
-                //System.err.println("Cannot insert values into bookingUsers: "+ e);
-            }
+            insertUsers(id, fName, lName, age, password);
         });
 
 
         fields.getChildren().addAll(loggedInLabel, label1, id, fName, lName, age, username, password, insertUserBtn, logoutBtn);
 
-//        root.getChildren().addAll(fields);
 
         scene2 = new Scene(fields);
         stage2.setScene(scene2);
         return scene2;
     }
 
-    private void insertUser(int id, String firstname, String lastname, int age, String username, String password)
-    {
+    private void insertUsers(TextField id, TextField fName, TextField lName, TextField age, PasswordField password) {
+        int thisId = Integer.parseInt(id.getText());
+        String firstname = fName.getText();
+        String lastname = lName.getText();
+        int thisAge = Integer.parseInt(age.getText());
+        String user = username.getText();
+        String pass = password.getText();
 
+        try
+        {
+            Statement st = connection.createStatement();
 
+                String query = "INSERT INTO employee(id, firstname, lastname, age, username, password) " +
+                        "VALUES (?,?,?,?,?,?)";
+
+                PreparedStatement pst = connection.prepareStatement(query);
+
+                pst.setInt(1, thisId);
+                pst.setString(2, firstname);
+                pst.setString(3, lastname);
+                pst.setInt(4, thisAge);
+                pst.setString(5, user);
+                pst.setString(6, pass);
+
+                System.out.println("Inserted user into database: "+ this.username.getText());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Info");
+                alert.setHeaderText(null);
+                alert.setContentText("User has been inserted into database.");
+                alert.showAndWait();
+                pst.execute();
+                pst.close();
+
+        } catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
     }
-
 
 }
