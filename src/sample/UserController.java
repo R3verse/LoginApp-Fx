@@ -43,7 +43,7 @@ public class UserController implements Initializable{
             FXMLLoader loader = new FXMLLoader();
             Pane root = loader.load(getClass().getResource("Login.fxml").openStream());
             Scene scene = new Scene(root);
-            secondStage.setTitle("Hello World 2");
+            secondStage.setTitle("Login");
             secondStage.setScene(scene);
             secondStage.show();
 

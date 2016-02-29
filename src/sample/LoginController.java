@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.fxml.Initializable;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -81,6 +82,20 @@ public class LoginController implements Initializable {
                 isConnected.setStyle("-fx-font-weight: bold;");
                 isConnected.setText("Connected to: "+ InetAddress.getLocalHost().getHostName());
 
+                txtUsername.setOnKeyPressed(e ->{
+                    if(e.getCode() == KeyCode.ENTER){
+                        login();
+                    }
+                });
+
+
+                txtPassword.setOnKeyPressed(e ->{
+                    if(e.getCode() == KeyCode.ENTER){
+                        login();
+                    }
+
+                });
+
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             }
@@ -94,22 +109,47 @@ public class LoginController implements Initializable {
     {
         try {
 
-            if(loginModel.isLoggedIn(txtUsername.getText(), txtPassword.getText())){
-                isConnected.setText("Logged in as: " + txtUsername.getText());
 
-                stage2 = new Stage();
-                FXMLLoader loader = new FXMLLoader();
+            PreparedStatement preparedStatement = null;
+            ResultSet resultSet = null;
+            String query = "SELECT * FROM employee WHERE username = ? and password = ?"; // search for user
+            try {
 
-                ActionEvent event = null;
-              //  ((Node)event.getSource()).getScene().getWindow().hide(); // hiding stage
-                setScene2();
-                stage2.show();
 
-            }else{
-                isConnected.setText("username/password combination is invalid");
+
+                preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setString(1, txtUsername.getText()); // replace this in query
+                preparedStatement.setString(2, txtPassword.getText());
+
+                resultSet = preparedStatement.executeQuery();
+
+                if(resultSet.next())
+                {
+
+                    isConnected.setText("Logged in as: " + txtUsername.getText());
+
+                    stage2 = new Stage();
+                    FXMLLoader loader = new FXMLLoader();
+
+                    ActionEvent event = null;
+                    //  ((Node)event.getSource()).getScene().getWindow().hide(); // hiding stage
+                    setScene2();
+                    stage2.show();
+
+                }else{
+                    isConnected.setText("username/password combination is invalid");
+                    showAlert("ERROR", "Invalid username/password combination!", "Please enter a valid username/password\nRemember the system is case sensitive.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }finally {
+                preparedStatement.close();
+                resultSet.close();
             }
+
         } catch (SQLException e) {
-            isConnected.setText("username/password combination is invalid");
+
             e.printStackTrace();
         }
     }
@@ -118,6 +158,7 @@ public class LoginController implements Initializable {
     {
 
         stage2.setTitle("User panel");
+
 
 
 
@@ -186,6 +227,16 @@ public class LoginController implements Initializable {
         scene2 = new Scene(fields);
         stage2.setScene(scene2);
         return scene2;
+    }
+
+    private void showAlert(String title, String headerText, String contentText)
+    {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        alert.showAndWait();
+
     }
 
     private void insertUsers(TextField id, TextField fName, TextField lName, TextField age, PasswordField password) {
