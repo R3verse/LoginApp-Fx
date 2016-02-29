@@ -152,7 +152,42 @@ public class LoginController implements Initializable {
         insertUserBtn.setFont(Font.font("Sanserif", 15));
         insertUserBtn.setMaxWidth(Double.MAX_VALUE);
 
-        insertUser(id, fName, lName, age, username, password, insertUserBtn);
+        insertUserBtn.setOnAction(e -> {
+
+            PreparedStatement preparedStatement = null;
+            try {
+//                Statement st = connection.createStatement();
+                String query = "INSERT INTO employee(id, firstname, lastname, age, username, password) VALUES" + "(?,?,?,?,?,?)";
+
+
+                String myId = id.getText();
+                String myFirstName = fName.getText();
+                String myLastName = lName.getText();
+                String myAge = age.getText();
+                String myUser = username.getText();
+                String myPass = password.getText();
+
+
+
+                preparedStatement.setInt(1, Integer.parseInt(myId));
+                    preparedStatement.setString(2, myFirstName);
+                    preparedStatement.setString(3, myLastName);
+                    preparedStatement.setInt(4, Integer.parseInt(myAge));
+                    preparedStatement.setString(5, myUser);
+                    preparedStatement.setString(6, myPass);
+
+                // execute the preparedstatement
+                preparedStatement.executeUpdate(query);
+
+                preparedStatement.close();
+                connection.close();
+                System.out.println("Done!");
+
+                } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        });
+
 
         fields.getChildren().addAll(loggedInLabel, label1, id, fName, lName, age, username, password, insertUserBtn, logoutBtn);
 
@@ -163,23 +198,7 @@ public class LoginController implements Initializable {
         return scene2;
     }
 
-    private void insertUser(TextField id, TextField fName, TextField lName, TextField age, TextField username, PasswordField password, Button insertUserBtn) {
-        insertUserBtn.setOnAction(e -> {
 
-               try {
-
-                   Statement st = connection.createStatement();
-
-                   st.executeUpdate("INSERT INTO employee(id, firstname, lastname, age, username, password)" +
-                           " VALUES ('" + (id.getText()) + "', '" + (fName.getText()) + "', '" + (lName.getText()) +"', '" + (age.getText()) +"', '" + (username.getText()) +"', '" + (password.getText()) +"' )");
-
-                   System.out.println("Success!");
-
-           } catch (SQLException e1) {
-                   e1.printStackTrace();
-               }
-        });
-    }
 
 
 }
